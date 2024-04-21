@@ -1,0 +1,37 @@
+{
+  "name": "modrate",
+  "version": "1.0.0",
+  "description": "Throttle effectively and safely.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "throttle",
+    "rate-limit",
+    "ratelimit",
+    "rate",
+    "limit"
+  ],
+  "author": {
+    "name": "Nick",
+    "email": "hmtu117@gmail.com",
+    "url": "https://github.com/tuhm1"
+  },
+  "license": "Apache-2.0",
+  "repository": "github:tuhm1/modrate",
+  "dependencies": {
+    "denque": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.5",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.5"
+  }
+}
