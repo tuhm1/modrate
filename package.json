@@ -23,7 +23,10 @@
     "url": "https://github.com/tuhm1"
   },
   "license": "Apache-2.0",
-  "repository": "github:tuhm1/modrate",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuhm1/modrate.git"
+  },
   "dependencies": {
     "denque": "^2.1.0"
   },
