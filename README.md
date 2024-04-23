@@ -18,20 +18,20 @@ import modrate from "modrate";
 const start = Date.now();
 
 function add(a, b) {
-  console.log(`${Date.now() - start}ms: func(${a}, ${b})`);
+  console.log(`${Date.now() - start}ms: add(${a}, ${b})`);
   return a + b;
 }
 
 const interval = 1000;
 const limit = 2;
-const throttleAdd = modrate.wrap(add, interval, limit);
+const throttledAdd = modrate.wrap(add, interval, limit);
 
 const promises = [];
-promises.push(throttleAdd(1, 2));
+promises.push(throttledAdd(1, 2));
 await new Promise((resolve) => setTimeout(resolve, 200));
-promises.push(throttleAdd(3, 4));
-promises.push(throttleAdd(5, 6));
-promises.push(throttleAdd(7, 8));
+promises.push(throttledAdd(3, 4));
+promises.push(throttledAdd(5, 6));
+promises.push(throttledAdd(7, 8));
 
 console.log("results:", await Promise.all(promises));
 ```
@@ -39,10 +39,10 @@ console.log("results:", await Promise.all(promises));
 Output:
 
 ```
-0ms: func(1, 2)
-200ms: func(3, 4)
-1000ms: func(5, 6)
-1200ms: func(7, 8)
+0ms: add(1, 2)
+200ms: add(3, 4)
+1000ms: add(5, 6)
+1200ms: add(7, 8)
 results: [ 3, 7, 11, 15 ]
 ```
 
