@@ -1,6 +1,6 @@
 {
   "name": "modrate",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Throttle effectively and safely.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
