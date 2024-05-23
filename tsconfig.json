@@ -9,5 +9,5 @@
     "declaration": true,
     "outDir": "dist"
   },
-  "exclude": ["*.test.ts"]
+  "exclude": ["*.test.ts", "dist"]
 }

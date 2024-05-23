@@ -1,42 +1,42 @@
 import Denque from "denque";
 
 class Modrate {
-  interval: number;
-  limit: number;
-  latest = new Denque<number>();
-  running = 0;
-  waiting = new Denque<(arg0?: unknown) => void>();
-  timeouts = new Denque<NodeJS.Timeout>();
+  #interval: number;
+  #limit: number;
+  #latest = new Denque<number>();
+  #running = 0;
+  #waiting = new Denque<(arg0?: unknown) => void>();
+  #timeouts = new Denque<NodeJS.Timeout>();
 
   constructor(interval: number, limit: number) {
-    this.interval = interval;
-    this.limit = limit;
+    this.#interval = interval;
+    this.#limit = limit;
   }
 
-  poll() {
-    if (this.waiting.size() <= this.timeouts.size()) return;
-    if (this.running + this.timeouts.size() >= this.limit) return;
+  #poll() {
+    if (this.#waiting.size() <= this.#timeouts.size()) return;
+    if (this.#running + this.#timeouts.size() >= this.#limit) return;
     if (
-      this.latest.size() >=
-      this.limit - this.running - this.timeouts.size()
+      this.#latest.size() >=
+      this.#limit - this.#running - this.#timeouts.size()
     ) {
-      const oldest = this.latest.shift()!;
+      const oldest = this.#latest.shift()!;
       const now = Date.now();
-      if (now - oldest < this.interval) {
+      if (now - oldest < this.#interval) {
         const timeout = setTimeout(
           () => {
-            this.timeouts.shift();
-            this.poll();
+            this.#timeouts.shift();
+            this.#poll();
           },
-          oldest + this.interval - now
+          oldest + this.#interval - now
         );
-        this.timeouts.push(timeout);
+        this.#timeouts.push(timeout);
         return;
       }
     }
 
-    ++this.running;
-    this.waiting.shift()!();
+    ++this.#running;
+    this.#waiting.shift()!();
   }
 
   /**
@@ -61,27 +61,27 @@ class Modrate {
         "abort",
         () => {
           reject(signal.reason);
-          const index = this.waiting.toArray().indexOf(resolve);
+          const index = this.#waiting.toArray().indexOf(resolve);
           if (index === -1) return;
-          this.waiting.removeOne(index);
-          if (this.waiting.size() < this.timeouts.size()) {
-            clearTimeout(this.timeouts.pop());
+          this.#waiting.removeOne(index);
+          if (this.#waiting.size() < this.#timeouts.size()) {
+            clearTimeout(this.#timeouts.pop());
           }
         },
         { once: true }
       );
-      this.waiting.push(resolve);
-      this.poll();
+      this.#waiting.push(resolve);
+      this.#poll();
     });
 
     return (count?: boolean) => {
-      --this.running;
+      --this.#running;
       if (count === false) {
-        clearTimeout(this.timeouts.pop());
+        clearTimeout(this.#timeouts.pop());
       } else {
-        this.latest.push(Date.now());
+        this.#latest.push(Date.now());
       }
-      this.poll();
+      this.#poll();
     };
   }
 }
